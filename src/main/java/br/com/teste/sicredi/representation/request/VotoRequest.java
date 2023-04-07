@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class VotoRequest {
 
-    private String cpfAssociado;
+    private Integer idAssociado;
 
     private String valorVoto;
 
-    private String idPauta;
+    private Integer idPauta;
 }

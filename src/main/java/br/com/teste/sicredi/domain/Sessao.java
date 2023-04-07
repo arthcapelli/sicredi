@@ -17,7 +17,7 @@ public class Sessao {
 
     private Integer id;
 
-    private Pauta pauta;
+    private Integer idPauta;
 
     private LocalDateTime dataLimite;
 }

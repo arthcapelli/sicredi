@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @AllArgsConstructor
@@ -23,7 +22,5 @@ public class Pauta {
     private Integer limiteVotos;
 
     private LocalDateTime dataCriacao;
-
-    private List<Voto> votos;
 
 }

@@ -16,9 +16,9 @@ public class Voto {
 
     private Integer id;
 
-    private Associado associado;
+    private Integer IdAssociado;
 
-    private Pauta pauta;
+    private Integer IdPauta;
 
     private ValorVoto valorVoto;
 }
