@@ -1,23 +1,21 @@
-package br.com.teste.sicredi.domain;
+package br.com.teste.sicredi.representation.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
 import java.time.LocalDateTime;
 
 @Getter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-@Entity
-public class Sessao {
+public class CadastrarPautaRequest {
 
-    private Integer id;
+    private String titulo;
 
-    private Pauta pauta;
+    private Integer limiteVotos;
 
-    private LocalDateTime dataLimite;
+    private LocalDateTime dataCriacao;
 }

@@ -1,20 +1,15 @@
-package br.com.teste.sicredi.domain;
+package br.com.teste.sicredi.representation.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-
 @Getter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-@Entity
-public class Associado {
-
-    private Integer id;
+public class CadastrarAssociadoRequest {
 
     private String cpf;
 }
