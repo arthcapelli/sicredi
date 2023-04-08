@@ -38,14 +38,4 @@ public class SessaoService {
                 .orElse(false);
     }
 
-//    public boolean sessaoEncerrada(Integer idSessao) {
-//        return repository.findById(idSessao)
-//                .map(sessao -> sessao.getDataLimite().isBefore(LocalDateTime.now()))
-//                .orElse(false);
-//    }
-
-//    public Sessao achaSessaoPorIdPauta(Integer idPauta) {
-//        return repository.findByIdPauta(idPauta);
-//    }
-
 }
