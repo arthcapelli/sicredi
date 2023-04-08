@@ -4,6 +4,7 @@ import br.com.teste.sicredi.domain.Pauta;
 import br.com.teste.sicredi.domain.ValorVoto;
 import br.com.teste.sicredi.domain.Voto;
 import br.com.teste.sicredi.exception.DataLimiteException;
+import br.com.teste.sicredi.exception.SessaoException;
 import br.com.teste.sicredi.exception.VotoInvalidoException;
 import br.com.teste.sicredi.mapper.VotoMapper;
 import br.com.teste.sicredi.repository.VotoRepository;
@@ -36,20 +37,31 @@ public class VotoService {
 
     public void receberVoto(VotoRequest request) {
         validaSessaoAindaAberta(request.getIdPauta());
-        validaLimiteDeVotosAtingido(request.getIdPauta());
         validaAssociadoJaVotou(request.getIdAssociado(), request.getIdPauta());
+
+        if (limiteDeVotosAtingido(request.getIdPauta())) {
+            throw new VotoInvalidoException("Limite de votos atingido.");
+        }
 
         Voto voto = votoMapper.toDomain(request);
         repository.save(voto);
     }
 
     public VencedorResponse contagemVotosVencedor(Integer idPauta) {
-        List<Voto> todosVotosDaPauta = repository.findAllByIdPauta(idPauta);
-        Optional<Pauta> pauta = pautaService.getById(idPauta);
-        int contagemSim = contagemVotos(todosVotosDaPauta, "Sim");
-        int contagemNao = contagemVotos(todosVotosDaPauta, "Não");
+        if (!sessaoService.verificaExisteSessaoParaPauta(idPauta)) {
+            throw new SessaoException("Sessão de votos para essa pauta não existe.");
+        }
 
-        return verificaVencedor(pauta, contagemSim, contagemNao);
+        if (limiteDeVotosAtingido(idPauta) || sessaoService.sessaoEncerrada(idPauta)) {
+            List<Voto> todosVotosDaPauta = repository.findAllByIdPauta(idPauta);
+            Pauta pauta = pautaService.getById(idPauta).orElseThrow();
+            int contagemSim = contagemVotos(todosVotosDaPauta, "Sim");
+            int contagemNao = contagemVotos(todosVotosDaPauta, "Não");
+
+            return verificaVencedor(pauta, contagemSim, contagemNao);
+        }
+        throw new VotoInvalidoException("Sessão ainda em aberto, não atingiu limite de data e/ou votos.");
+
     }
 
     private int contagemVotos(List<Voto> votosTotais, String valorVoto) {
@@ -60,7 +72,7 @@ public class VotoService {
                 .size();
     }
 
-    private VencedorResponse verificaVencedor(Optional<Pauta> pauta, int contagemSim, int contagemNao) {
+    private VencedorResponse verificaVencedor(Pauta pauta, int contagemSim, int contagemNao) {
         if (contagemSim > contagemNao) {
             return votoMapper.toVencedorResponse(pauta, ValorVoto.SIM.getDescription());
         } else if (contagemNao > contagemSim) {
@@ -69,14 +81,12 @@ public class VotoService {
         return votoMapper.toVencedorResponse(pauta, "Empate");
     }
 
-    private void validaLimiteDeVotosAtingido(Integer idPauta) {
+    private boolean limiteDeVotosAtingido(Integer idPauta) {
         Optional<Pauta> pautaASerVotada = pautaService.getById(idPauta);
 
-        pautaASerVotada.ifPresent(pauta -> {
-            if (Objects.equals(pauta.getLimiteVotos(), repository.countByIdPauta(idPauta))) {
-                throw new VotoInvalidoException("Limite de votos atingido.");
-            }
-        });
+        return pautaASerVotada.map(pauta ->
+                        Objects.equals(pauta.getLimiteVotos(), repository.countByIdPauta(idPauta)))
+                .orElse(false);
     }
 
     private void validaAssociadoJaVotou(Integer idAssociado, Integer idPauta) {

@@ -20,7 +20,7 @@ public class VotoController {
         votoService.receberVoto(request);
     }
 
-    @GetMapping({"idPauta"})
+    @GetMapping("{idPauta}")
     @ResponseStatus(HttpStatus.OK)
     public VencedorResponse resultadoPauta(@PathVariable Integer idPauta) {
         return votoService.contagemVotosVencedor(idPauta);

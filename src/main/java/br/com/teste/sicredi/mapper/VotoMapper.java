@@ -7,8 +7,6 @@ import br.com.teste.sicredi.representation.request.VotoRequest;
 import br.com.teste.sicredi.representation.response.VencedorResponse;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
-
 @Component
 public class VotoMapper {
 
@@ -20,9 +18,13 @@ public class VotoMapper {
                 .build();
     }
 
-    public VencedorResponse toVencedorResponse(final Optional<Pauta> pauta, String resultado) {
+    public VencedorResponse toVencedorResponse(final Pauta pauta, String resultado) {
         return VencedorResponse.builder()
-                .fraseVencedor("A pauta " + pauta.map(Pauta::getTitulo) + " teve o resultado: " + resultado)
+                .fraseVencedor(montaFraseVencedor(pauta.getTitulo(), resultado))
                 .build();
+    }
+
+    private String montaFraseVencedor(String titulo, String resultado) {
+        return "A pauta " + titulo + " teve o resultado: " + resultado;
     }
 }

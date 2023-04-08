@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface SessaoRepository extends CrudRepository<Sessao, Integer> {
 
     Sessao findByIdPauta(Integer idPauta);
+
+    boolean existsByIdPauta(Integer idPauta);
 }
