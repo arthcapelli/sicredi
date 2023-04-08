@@ -8,6 +8,7 @@ import br.com.teste.sicredi.exception.VotoInvalidoException;
 import br.com.teste.sicredi.mapper.VotoMapper;
 import br.com.teste.sicredi.repository.VotoRepository;
 import br.com.teste.sicredi.representation.request.VotoRequest;
+import br.com.teste.sicredi.representation.response.VencedorResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +35,7 @@ public class VotoService {
     private SessaoService sessaoService;
 
     public void receberVoto(VotoRequest request) {
-        validaSessao(request.getIdPauta());
+        validaSessaoAindaAberta(request.getIdPauta());
         validaLimiteDeVotosAtingido(request.getIdPauta());
         validaAssociadoJaVotou(request.getIdAssociado(), request.getIdPauta());
 
@@ -42,24 +43,30 @@ public class VotoService {
         repository.save(voto);
     }
 
-    public String contagemVotos(Integer idPauta) {
-        List<Voto> contagemVotos = repository.findAllByIdPauta(idPauta);
-        Integer contagemSim = contagemVotos(contagemVotos, "Sim");
-        Integer contagemNao = contagemVotos(contagemVotos, "Não");
+    public VencedorResponse contagemVotosVencedor(Integer idPauta) {
+        List<Voto> todosVotosDaPauta = repository.findAllByIdPauta(idPauta);
+        Optional<Pauta> pauta = pautaService.getById(idPauta);
+        int contagemSim = contagemVotos(todosVotosDaPauta, "Sim");
+        int contagemNao = contagemVotos(todosVotosDaPauta, "Não");
 
-        if (contagemSim > contagemNao) {
-            return ValorVoto.SIM.getDescription();
-        }
-
-        return ValorVoto.NAO.getDescription();
+        return verificaVencedor(pauta, contagemSim, contagemNao);
     }
 
-    private int contagemVotos(List<Voto> contagemVotos, String valorVoto) {
-        return contagemVotos
+    private int contagemVotos(List<Voto> votosTotais, String valorVoto) {
+        return votosTotais
                 .stream()
                 .filter(voto -> voto.getValorVoto().equals(valorVoto))
                 .toList()
                 .size();
+    }
+
+    private VencedorResponse verificaVencedor(Optional<Pauta> pauta, int contagemSim, int contagemNao) {
+        if (contagemSim > contagemNao) {
+            return votoMapper.toVencedorResponse(pauta, ValorVoto.SIM.getDescription());
+        } else if (contagemNao > contagemSim) {
+            return votoMapper.toVencedorResponse(pauta, ValorVoto.NAO.getDescription());
+        }
+        return votoMapper.toVencedorResponse(pauta, "Empate");
     }
 
     private void validaLimiteDeVotosAtingido(Integer idPauta) {
@@ -78,7 +85,7 @@ public class VotoService {
         }
     }
 
-    private void validaSessao(Integer idPauta) {
+    private void validaSessaoAindaAberta(Integer idPauta) {
         if (sessaoService.sessaoEncerrada(idPauta)) {
             throw new DataLimiteException("Sessão de votos encerrada para essa pauta.");
         }
