@@ -19,7 +19,7 @@ public class SessaoMapper {
 
         return Sessao.builder()
                 .idPauta(request.getIdPauta())
-                .dataLimite(validaDataLimite(dataLimite))
+                .dataLimite(dataLimite)
                 .build();
     }
 

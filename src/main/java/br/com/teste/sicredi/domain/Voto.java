@@ -5,20 +5,25 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Entity
+@Table(name = "db_voto")
+@SequenceGenerator(name = "seq_db_voto", sequenceName = "seq_db_voto", allocationSize = 1)
 public class Voto {
 
+    @Id
+    @GeneratedValue(generator = "seq_db_voto")
+    @Column(name = "id", nullable = false)
     private Integer id;
 
     private Integer IdAssociado;
 
     private Integer IdPauta;
 
-    private ValorVoto valorVoto;
+    private String valorVoto;
 }
