@@ -19,9 +19,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -116,13 +118,10 @@ public class VotoServiceTest {
         request.setIdPauta(1);
         request.setIdAssociado(1);
 
-        when(votoRepository.countByIdPauta(request.getIdPauta())).thenReturn(1);
-
         Pauta pauta = Pauta.builder()
                 .limiteVotos(10)
                 .build();
 
-        when(pautaService.getById(request.getIdPauta())).thenReturn(Optional.of(pauta));
         when(sessaoService.sessaoEncerrada(1)).thenThrow(DataLimiteException.class);
 
         // Act & Assert
@@ -154,42 +153,144 @@ public class VotoServiceTest {
     }
 
     @Test
-    public void contagemVotosVencedor_sessaoFechada_verificaVencedor() {
-        // Arrange
-        int idPauta = 1;
-
+    public void contagemVotosVencedor_sessaoFechada_verificaVencedorSim() {
+        Integer idPauta = 1;
         when(sessaoService.verificaExisteSessaoParaPauta(idPauta)).thenReturn(true);
         when(sessaoService.sessaoEncerrada(idPauta)).thenReturn(true);
 
-        List<Voto> votos = Arrays.asList(
-                Voto.builder().idPauta(idPauta)
-                        .valorVoto("Sim")
+        List<Voto> votos = Arrays.asList(Voto.builder()
+                        .id(1)
                         .idAssociado(1)
-                        .build(),
-                Voto.builder().idPauta(idPauta)
-                        .valorVoto("Não")
-                        .idAssociado(2)
-                        .build(),
-                Voto.builder().idPauta(idPauta)
+                        .idPauta(1)
                         .valorVoto("Sim")
-                        .idAssociado(3)
-                        .build()
-        );
+                        .build(),
+                Voto.builder()
+                        .id(1)
+                        .idAssociado(1)
+                        .idPauta(1)
+                        .valorVoto("Sim")
+                        .build(),
+                Voto.builder()
+                        .id(1)
+                        .idAssociado(1)
+                        .idPauta(1)
+                        .valorVoto("Sim")
+                        .build());
 
         when(votoRepository.findAllByIdPauta(idPauta)).thenReturn(votos);
 
-        Pauta pauta = new Pauta();
-        
+        Pauta pauta = Pauta.builder()
+                .id(idPauta)
+                .limiteVotos(3)
+                .titulo("Teste")
+                .build();
+
         when(pautaService.getById(idPauta)).thenReturn(Optional.of(pauta));
+
         when(votoMapper.toVencedorResponse(eq(pauta), anyString())).thenReturn(new VencedorResponse());
 
-        // Act
-        votoService.contagemVotosVencedor(idPauta);
+        VencedorResponse result = votoService.contagemVotosVencedor(idPauta);
 
-        // Assert
         verify(votoRepository).findAllByIdPauta(idPauta);
-        verify(pautaService).getById(idPauta);
+        verify(pautaService, times(2)).getById(idPauta);
         verify(votoMapper).toVencedorResponse(eq(pauta), anyString());
+        assertNotNull(result);
+    }
+
+    @Test
+    public void contagemVotosVencedor_sessaoFechada_verificaVencedorNao() {
+        Integer idPauta = 1;
+        when(sessaoService.verificaExisteSessaoParaPauta(idPauta)).thenReturn(true);
+        when(sessaoService.sessaoEncerrada(idPauta)).thenReturn(true);
+
+        List<Voto> votos = Arrays.asList(Voto.builder()
+                        .id(1)
+                        .idAssociado(1)
+                        .idPauta(1)
+                        .valorVoto("Não")
+                        .build(),
+                Voto.builder()
+                        .id(1)
+                        .idAssociado(1)
+                        .idPauta(1)
+                        .valorVoto("Não")
+                        .build(),
+                Voto.builder()
+                        .id(1)
+                        .idAssociado(1)
+                        .idPauta(1)
+                        .valorVoto("Não")
+                        .build());
+
+        when(votoRepository.findAllByIdPauta(idPauta)).thenReturn(votos);
+
+        Pauta pauta = Pauta.builder()
+                .id(idPauta)
+                .limiteVotos(3)
+                .titulo("Teste")
+                .build();
+
+        when(pautaService.getById(idPauta)).thenReturn(Optional.of(pauta));
+
+        when(votoMapper.toVencedorResponse(eq(pauta), anyString())).thenReturn(new VencedorResponse());
+
+        VencedorResponse result = votoService.contagemVotosVencedor(idPauta);
+
+        verify(votoRepository).findAllByIdPauta(idPauta);
+        verify(pautaService, times(2)).getById(idPauta);
+        verify(votoMapper).toVencedorResponse(eq(pauta), anyString());
+        assertNotNull(result);
+    }
+
+    @Test
+    public void contagemVotosVencedor_sessaoFechada_verificaVencedorEmpate() {
+        Integer idPauta = 1;
+        when(sessaoService.verificaExisteSessaoParaPauta(idPauta)).thenReturn(true);
+        when(sessaoService.sessaoEncerrada(idPauta)).thenReturn(true);
+
+        List<Voto> votos = Arrays.asList(Voto.builder()
+                        .id(1)
+                        .idAssociado(1)
+                        .idPauta(1)
+                        .valorVoto("Não")
+                        .build(),
+                Voto.builder()
+                        .id(1)
+                        .idAssociado(1)
+                        .idPauta(1)
+                        .valorVoto("Não")
+                        .build(),
+                Voto.builder()
+                        .id(1)
+                        .idAssociado(1)
+                        .idPauta(1)
+                        .valorVoto("Sim")
+                        .build(),
+                Voto.builder()
+                        .id(1)
+                        .idAssociado(1)
+                        .idPauta(1)
+                        .valorVoto("Sim")
+                        .build());
+
+        when(votoRepository.findAllByIdPauta(idPauta)).thenReturn(votos);
+
+        Pauta pauta = Pauta.builder()
+                .id(idPauta)
+                .limiteVotos(4)
+                .titulo("Teste")
+                .build();
+
+        when(pautaService.getById(idPauta)).thenReturn(Optional.of(pauta));
+
+        when(votoMapper.toVencedorResponse(eq(pauta), anyString())).thenReturn(new VencedorResponse());
+
+        VencedorResponse result = votoService.contagemVotosVencedor(idPauta);
+
+        verify(votoRepository).findAllByIdPauta(idPauta);
+        verify(pautaService, times(2)).getById(idPauta);
+        verify(votoMapper).toVencedorResponse(eq(pauta), anyString());
+        assertNotNull(result);
     }
 
 }
