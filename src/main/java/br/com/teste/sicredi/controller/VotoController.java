@@ -13,11 +13,11 @@ public class VotoController {
     @Autowired
     VotoService votoService;
 
-    //    votar numa pauta
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void votarPauta(@RequestBody final VotoRequest request) {
         votoService.receberVoto(request);
     }
-//    contabilizar votos e dar resultado
+
+
 }

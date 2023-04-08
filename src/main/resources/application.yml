@@ -1,1 +1,22 @@
-
+server:
+  port: 8090
+  servlet:
+    context-path: /sicredi
+  error:
+    include-message: always
+    include-binding-errors: always
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  datasource:
+    hikari:
+      maximum-pool-size: 3
+    username: muriorfr
+    password: SponKsrM2tNITbuv4PyQNIvpzgHCNCLu
+    url: jdbc:postgresql://babar.db.elephantsql.com:5432/muriorfr?user=muriorfr&password=SponKsrM2tNITbuv4PyQNIvpzgHCNCLu
+    driver-class-name: org.postgresql.Driver

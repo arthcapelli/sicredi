@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Getter
 @AllArgsConstructor
@@ -21,9 +21,9 @@ public class Voto {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    private Integer IdAssociado;
+    private Integer idAssociado;
 
-    private Integer IdPauta;
+    private Integer idPauta;
 
     private String valorVoto;
 }

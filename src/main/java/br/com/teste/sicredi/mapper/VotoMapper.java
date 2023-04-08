@@ -10,9 +10,9 @@ public class VotoMapper {
 
     public Voto toDomain(final VotoRequest request) {
         return Voto.builder()
-                .IdAssociado(request.getIdAssociado())
-                .valorVoto(ValorVoto.valueOf(request.getValorVoto()))
-                .IdPauta(request.getIdPauta())
+                .idAssociado(request.getIdAssociado())
+                .valorVoto(ValorVoto.valueOf(request.getValorVoto()).getDescription())
+                .idPauta(request.getIdPauta())
                 .build();
     }
 }
