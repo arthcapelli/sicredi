@@ -21,19 +21,22 @@ public class PautaService {
     private PautaMapper pautaMapper;
 
     public void cadastrarPauta(CadastrarPautaRequest request) {
+
         validaDataCriacao(request);
+
         Pauta pauta = pautaMapper.toDomain(request);
 
         repository.save(pauta);
     }
 
     private void validaDataCriacao(CadastrarPautaRequest request) {
+
         if (request.getDataCriacao().isBefore(LocalDateTime.now())) {
             throw new DataCriacaoException("Data de criação inválida.");
         }
     }
 
-    public Optional<Pauta> getById(Integer idPauta) {
+    public Optional<Pauta> getPautaById(Integer idPauta) {
         return repository.findById(idPauta);
     }
 }

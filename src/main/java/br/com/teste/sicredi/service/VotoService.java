@@ -36,7 +36,9 @@ public class VotoService {
     private SessaoService sessaoService;
 
     public void receberVoto(VotoRequest request) {
+
         validaSessaoAindaAberta(request.getIdPauta());
+
         validaAssociadoJaVotou(request.getIdAssociado(), request.getIdPauta());
 
         if (limiteDeVotosAtingido(request.getIdPauta())) {
@@ -48,20 +50,21 @@ public class VotoService {
     }
 
     public VencedorResponse contagemVotosVencedor(Integer idPauta) {
+
         if (!sessaoService.verificaExisteSessaoParaPauta(idPauta)) {
             throw new SessaoException("Sessão de votos para essa pauta não existe.");
         }
 
         if (limiteDeVotosAtingido(idPauta) || sessaoService.sessaoEncerrada(idPauta)) {
             List<Voto> todosVotosDaPauta = repository.findAllByIdPauta(idPauta);
-            Pauta pauta = pautaService.getById(idPauta).orElseThrow();
+            Pauta pauta = pautaService.getPautaById(idPauta).orElseThrow();
             int contagemSim = contagemVotos(todosVotosDaPauta, "Sim");
             int contagemNao = contagemVotos(todosVotosDaPauta, "Não");
 
             return verificaVencedor(pauta, contagemSim, contagemNao);
         }
-        throw new VotoInvalidoException("Sessão ainda em aberto, não atingiu limite de data e/ou votos.");
 
+        throw new VotoInvalidoException("Sessão ainda em aberto, não atingiu limite de data e/ou votos.");
     }
 
     private int contagemVotos(List<Voto> votosTotais, String valorVoto) {
@@ -73,16 +76,19 @@ public class VotoService {
     }
 
     private VencedorResponse verificaVencedor(Pauta pauta, int contagemSim, int contagemNao) {
+
         if (contagemSim > contagemNao) {
             return votoMapper.toVencedorResponse(pauta, ValorVoto.SIM.getDescription());
         } else if (contagemNao > contagemSim) {
             return votoMapper.toVencedorResponse(pauta, ValorVoto.NAO.getDescription());
         }
+
         return votoMapper.toVencedorResponse(pauta, "Empate");
     }
 
     private boolean limiteDeVotosAtingido(Integer idPauta) {
-        Optional<Pauta> pautaASerVotada = pautaService.getById(idPauta);
+
+        Optional<Pauta> pautaASerVotada = pautaService.getPautaById(idPauta);
 
         return pautaASerVotada.map(pauta ->
                         Objects.equals(pauta.getLimiteVotos(), repository.countByIdPauta(idPauta)))
@@ -90,12 +96,14 @@ public class VotoService {
     }
 
     private void validaAssociadoJaVotou(Integer idAssociado, Integer idPauta) {
+
         if (repository.existsByIdAssociadoAndIdPauta(idAssociado, idPauta)) {
             throw new VotoInvalidoException("Associado já votou nessa pauta.");
         }
     }
 
     private void validaSessaoAindaAberta(Integer idPauta) {
+
         if (sessaoService.sessaoEncerrada(idPauta)) {
             throw new DataLimiteException("Sessão de votos encerrada para essa pauta.");
         }

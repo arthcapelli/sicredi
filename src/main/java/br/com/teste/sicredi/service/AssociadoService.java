@@ -19,6 +19,7 @@ public class AssociadoService {
     private AssociadoMapper associadoMapper;
 
     public void cadastrarAssociado(CadastrarAssociadoRequest request) {
+
         Associado associado = associadoMapper.toDomain(request);
 
         repository.save(associado);

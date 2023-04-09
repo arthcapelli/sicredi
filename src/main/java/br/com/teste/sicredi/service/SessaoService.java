@@ -33,7 +33,7 @@ public class SessaoService {
         }
         LocalDateTime dataLimite = verificaDataLimite(request.getDataLimite());
 
-        Sessao sessao = pautaService.getById(request.getIdPauta())
+        Sessao sessao = pautaService.getPautaById(request.getIdPauta())
                 .map(pauta -> sessaoMapper.toDomain(request, dataLimite))
                 .orElseThrow(() -> new PautaNaoExisteException("Pauta não existe."));
 
@@ -47,6 +47,7 @@ public class SessaoService {
     }
 
     private LocalDateTime validaDataLimite(LocalDateTime request) {
+
         if (request.isBefore(LocalDateTime.now())) {
             throw new DataLimiteException("Data limite não pode ser antes da data atual.");
         }

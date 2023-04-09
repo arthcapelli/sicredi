@@ -85,12 +85,12 @@ public class VotoServiceTest {
                 .build();
 
         when(votoRepository.countByIdPauta(request.getIdPauta())).thenReturn(1);
-        when(pautaService.getById(request.getIdPauta())).thenReturn(Optional.of(pauta));
+        when(pautaService.getPautaById(request.getIdPauta())).thenReturn(Optional.of(pauta));
 
         votoService.receberVoto(request);
 
         verify(votoRepository).countByIdPauta(request.getIdPauta());
-        verify(pautaService).getById(request.getIdPauta());
+        verify(pautaService).getPautaById(request.getIdPauta());
     }
 
     @Test(expected = DataLimiteException.class)
@@ -140,13 +140,13 @@ public class VotoServiceTest {
         when(sessaoService.verificaExisteSessaoParaPauta(idPauta)).thenReturn(true);
         when(sessaoService.sessaoEncerrada(idPauta)).thenReturn(true);
         when(votoRepository.findAllByIdPauta(idPauta)).thenReturn(votos);
-        when(pautaService.getById(idPauta)).thenReturn(Optional.of(pauta));
+        when(pautaService.getPautaById(idPauta)).thenReturn(Optional.of(pauta));
         when(votoMapper.toVencedorResponse(eq(pauta), anyString())).thenReturn(new VencedorResponse());
 
         VencedorResponse result = votoService.contagemVotosVencedor(idPauta);
 
         verify(votoRepository).findAllByIdPauta(idPauta);
-        verify(pautaService, times(2)).getById(idPauta);
+        verify(pautaService, times(2)).getPautaById(idPauta);
         verify(votoMapper).toVencedorResponse(eq(pauta), anyString());
         assertNotNull(result);
     }
@@ -168,13 +168,13 @@ public class VotoServiceTest {
         when(sessaoService.verificaExisteSessaoParaPauta(idPauta)).thenReturn(true);
         when(sessaoService.sessaoEncerrada(idPauta)).thenReturn(true);
         when(votoRepository.findAllByIdPauta(idPauta)).thenReturn(votos);
-        when(pautaService.getById(idPauta)).thenReturn(Optional.of(pauta));
+        when(pautaService.getPautaById(idPauta)).thenReturn(Optional.of(pauta));
         when(votoMapper.toVencedorResponse(eq(pauta), anyString())).thenReturn(new VencedorResponse());
 
         VencedorResponse result = votoService.contagemVotosVencedor(idPauta);
 
         verify(votoRepository).findAllByIdPauta(idPauta);
-        verify(pautaService, times(2)).getById(idPauta);
+        verify(pautaService, times(2)).getPautaById(idPauta);
         verify(votoMapper).toVencedorResponse(eq(pauta), anyString());
         assertNotNull(result);
     }
@@ -197,13 +197,13 @@ public class VotoServiceTest {
         when(sessaoService.verificaExisteSessaoParaPauta(idPauta)).thenReturn(true);
         when(sessaoService.sessaoEncerrada(idPauta)).thenReturn(true);
         when(votoRepository.findAllByIdPauta(idPauta)).thenReturn(votos);
-        when(pautaService.getById(idPauta)).thenReturn(Optional.of(pauta));
+        when(pautaService.getPautaById(idPauta)).thenReturn(Optional.of(pauta));
         when(votoMapper.toVencedorResponse(eq(pauta), anyString())).thenReturn(new VencedorResponse());
 
         VencedorResponse result = votoService.contagemVotosVencedor(idPauta);
 
         verify(votoRepository).findAllByIdPauta(idPauta);
-        verify(pautaService, times(2)).getById(idPauta);
+        verify(pautaService, times(2)).getPautaById(idPauta);
         verify(votoMapper).toVencedorResponse(eq(pauta), anyString());
         assertNotNull(result);
     }

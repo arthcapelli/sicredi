@@ -52,7 +52,7 @@ public class SessaoServiceTest {
                 .dataLimite(request.getDataLimite())
                 .build();
 
-        when(pautaService.getById(1)).thenReturn(Optional.of(pauta));
+        when(pautaService.getPautaById(1)).thenReturn(Optional.of(pauta));
         when(sessaoMapper.toDomain(request, request.getDataLimite())).thenReturn(sessao);
 
         sessaoService.criarSessao(request);
@@ -75,7 +75,7 @@ public class SessaoServiceTest {
         AbrirSessaoRequest request = new AbrirSessaoRequest();
         request.setIdPauta(1);
 
-        when(pautaService.getById(1)).thenReturn(Optional.empty());
+        when(pautaService.getPautaById(1)).thenReturn(Optional.empty());
 
         sessaoService.criarSessao(request);
     }
