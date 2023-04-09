@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @RunWith(MockitoJUnitRunner.class)
 public class VotoMapperTest {
 
-    private VotoMapper votoMapper = new VotoMapper();
+    private final VotoMapper votoMapper = new VotoMapper();
 
     @Test
     public void testToDomain() {

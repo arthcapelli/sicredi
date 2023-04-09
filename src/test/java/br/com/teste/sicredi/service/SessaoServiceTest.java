@@ -24,6 +24,10 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SessaoServiceTest {
+
+    @InjectMocks
+    private SessaoService sessaoService;
+
     @Mock
     private SessaoRepository sessaoRepository;
 
@@ -32,9 +36,6 @@ public class SessaoServiceTest {
 
     @Mock
     private SessaoMapper sessaoMapper;
-
-    @InjectMocks
-    private SessaoService sessaoService;
 
     @Test
     public void testCriarSessao() {
@@ -46,13 +47,12 @@ public class SessaoServiceTest {
                 .id(1)
                 .build();
 
-        when(pautaService.getById(1)).thenReturn(Optional.of(pauta));
-
         Sessao sessao = Sessao.builder()
                 .idPauta(1)
                 .dataLimite(request.getDataLimite())
                 .build();
 
+        when(pautaService.getById(1)).thenReturn(Optional.of(pauta));
         when(sessaoMapper.toDomain(request, request.getDataLimite())).thenReturn(sessao);
 
         sessaoService.criarSessao(request);
@@ -64,6 +64,7 @@ public class SessaoServiceTest {
     public void testCriarSessaoSessaoJaExiste() {
         AbrirSessaoRequest request = new AbrirSessaoRequest();
         request.setIdPauta(1);
+
         when(sessaoRepository.existsByIdPauta(1)).thenReturn(true);
 
         sessaoService.criarSessao(request);
@@ -73,6 +74,7 @@ public class SessaoServiceTest {
     public void testCriarSessaoPautaNaoExiste() {
         AbrirSessaoRequest request = new AbrirSessaoRequest();
         request.setIdPauta(1);
+
         when(pautaService.getById(1)).thenReturn(Optional.empty());
 
         sessaoService.criarSessao(request);
@@ -80,10 +82,6 @@ public class SessaoServiceTest {
 
     @Test(expected = DataLimiteException.class)
     public void testCriarSessaoDataInvalida() {
-        Pauta pauta = Pauta.builder()
-                .id(1)
-                .build();
-
         AbrirSessaoRequest request = new AbrirSessaoRequest();
         request.setIdPauta(1);
         request.setDataLimite(LocalDateTime.of(2022, 12, 12, 12, 0, 0));

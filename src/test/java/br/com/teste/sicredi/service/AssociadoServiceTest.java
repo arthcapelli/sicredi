@@ -26,7 +26,6 @@ public class AssociadoServiceTest {
     @Mock
     private AssociadoMapper mapper;
 
-
     @Test
     public void testCadastrarAssociado() {
         CadastrarAssociadoRequest request = CadastrarAssociadoRequest.builder()

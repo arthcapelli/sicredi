@@ -12,13 +12,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SessaoMapperTest {
-    private SessaoMapper sessaoMapper = new SessaoMapper();
+
+    private final SessaoMapper sessaoMapper = new SessaoMapper();
 
     @Test
     public void testToDomain() {
         AbrirSessaoRequest request = new AbrirSessaoRequest();
         request.setIdPauta(1);
-        LocalDateTime dataLimite = LocalDateTime.of(2023, 12,12,12, 0, 0);
+        LocalDateTime dataLimite = LocalDateTime.of(2023, 12, 12, 12, 0, 0);
 
         Sessao sessao = sessaoMapper.toDomain(request, dataLimite);
 
