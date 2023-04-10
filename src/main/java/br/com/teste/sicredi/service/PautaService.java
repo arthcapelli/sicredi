@@ -46,4 +46,8 @@ public class PautaService {
     public Optional<Pauta> getPautaById(Integer idPauta) {
         return repository.findById(idPauta);
     }
+
+    public boolean existsById(Integer idPauta) {
+        return repository.existsById(idPauta);
+    }
 }

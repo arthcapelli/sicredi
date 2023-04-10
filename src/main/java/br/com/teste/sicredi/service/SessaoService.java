@@ -32,22 +32,29 @@ public class SessaoService {
 
         log.info("Verificando se já existe sessão para a pauta requisitada.");
 
-        if (verificaSessaoExiste(request)) {
-            log.info("Já existe sessão para a pauta requisitada.");
-            throw new SessaoException("A sessão dessa pauta já existe.");
-        }
+        verificaSessaoExiste(request);
 
         log.info("Verificando se a data limite é válida.");
 
         LocalDateTime dataLimite = verificaDataLimite(request.getDataLimite());
 
-        Sessao sessao = pautaService.getPautaById(request.getIdPauta())
-                .map(pauta -> sessaoMapper.toDomain(request, dataLimite))
-                .orElseThrow(() -> new PautaNaoExisteException("Pauta não existe."));
+        log.info("Verificando se a pauta existe.");
+
+        verificaSeAPautaExiste(request);
+
+        Sessao sessao = sessaoMapper.toDomain(request, dataLimite);
 
         log.info("Salvando sessão criada.");
 
         repository.save(sessao);
+    }
+
+    private void verificaSessaoExiste(AbrirSessaoRequest request) {
+
+        if (repository.existsByIdPauta(request.getIdPauta())) {
+            log.info("Já existe sessão para a pauta requisitada.");
+            throw new SessaoException("A sessão dessa pauta já existe.");
+        }
     }
 
     private LocalDateTime verificaDataLimite(LocalDateTime dataLimite) {
@@ -69,8 +76,11 @@ public class SessaoService {
         return request;
     }
 
-    private boolean verificaSessaoExiste(AbrirSessaoRequest request) {
-        return repository.existsByIdPauta(request.getIdPauta());
+    private void verificaSeAPautaExiste(AbrirSessaoRequest request) {
+
+        if (!pautaService.existsById(request.getIdPauta())) {
+            throw new PautaNaoExisteException("Pauta não existe.");
+        }
     }
 
     public boolean sessaoEncerrada(Integer idPauta) {

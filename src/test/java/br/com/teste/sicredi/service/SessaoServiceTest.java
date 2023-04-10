@@ -75,7 +75,7 @@ public class SessaoServiceTest {
         AbrirSessaoRequest request = new AbrirSessaoRequest();
         request.setIdPauta(1);
 
-        when(pautaService.getPautaById(1)).thenReturn(Optional.empty());
+        when(pautaService.existsById(1)).thenReturn(false);
 
         sessaoService.criarSessao(request);
     }
