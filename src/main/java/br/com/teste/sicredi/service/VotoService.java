@@ -59,6 +59,22 @@ public class VotoService {
         repository.save(voto);
     }
 
+    private void validaSessaoAindaAberta(Integer idPauta) {
+
+        if (sessaoService.sessaoEncerrada(idPauta)) {
+            log.info("Sessão teve o tempo expirado e está encerrada.");
+            throw new DataLimiteException("Sessão de votos encerrada para essa pauta.");
+        }
+    }
+
+    private void validaAssociadoJaVotou(Integer idAssociado, Integer idPauta) {
+
+        if (repository.existsByIdAssociadoAndIdPauta(idAssociado, idPauta)) {
+            log.info("Associado já votou nessa pauta.");
+            throw new VotoInvalidoException("Associado já votou nessa pauta.");
+        }
+    }
+
     public VencedorResponse contagemVotosVencedor(Integer idPauta) {
 
         if (!sessaoService.verificaExisteSessaoParaPauta(idPauta)) {
@@ -108,22 +124,6 @@ public class VotoService {
         return pautaASerVotada.map(pauta ->
                         Objects.equals(pauta.getLimiteVotos(), repository.countByIdPauta(idPauta)))
                 .orElse(false);
-    }
-
-    private void validaAssociadoJaVotou(Integer idAssociado, Integer idPauta) {
-
-        if (repository.existsByIdAssociadoAndIdPauta(idAssociado, idPauta)) {
-            log.info("Associado já votou nessa pauta.");
-            throw new VotoInvalidoException("Associado já votou nessa pauta.");
-        }
-    }
-
-    private void validaSessaoAindaAberta(Integer idPauta) {
-
-        if (sessaoService.sessaoEncerrada(idPauta)) {
-            log.info("Sessão teve o tempo expirado e está encerrada.");
-            throw new DataLimiteException("Sessão de votos encerrada para essa pauta.");
-        }
     }
 
 }
