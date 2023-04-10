@@ -15,7 +15,6 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -52,7 +51,7 @@ public class SessaoServiceTest {
                 .dataLimite(request.getDataLimite())
                 .build();
 
-        when(pautaService.getPautaById(1)).thenReturn(Optional.of(pauta));
+        when(pautaService.existsById(1)).thenReturn(true);
         when(sessaoMapper.toDomain(request, request.getDataLimite())).thenReturn(sessao);
 
         sessaoService.criarSessao(request);

@@ -114,7 +114,7 @@ public class VotoServiceTest {
         votoService.contagemVotosVencedor(idPauta);
     }
 
-    @Test(expected = VotoInvalidoException.class)
+    @Test(expected = SessaoException.class)
     public void testContagemVotosVencedorSessaoEmAbertoVotoInvalidoException() {
         int idPauta = 1;
         when(sessaoService.verificaExisteSessaoParaPauta(idPauta)).thenReturn(true);

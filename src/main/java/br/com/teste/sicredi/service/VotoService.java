@@ -99,7 +99,7 @@ public class VotoService {
             return verificaVencedor(pauta, contagemSim, contagemNao);
         }
         log.info("Sessão ainda em aberto, não atingiu limite de data e/ou votos.");
-        throw new VotoInvalidoException("Sessão ainda em aberto, não atingiu limite de data e/ou votos.");
+        throw new SessaoException("Sessão ainda em aberto, não atingiu limite de data e/ou votos.");
     }
 
     private int contagemVotos(List<Voto> votosTotais, String valorVoto) {
