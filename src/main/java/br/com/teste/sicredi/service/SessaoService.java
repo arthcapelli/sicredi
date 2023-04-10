@@ -7,6 +7,7 @@ import br.com.teste.sicredi.exception.SessaoException;
 import br.com.teste.sicredi.mapper.SessaoMapper;
 import br.com.teste.sicredi.repository.SessaoRepository;
 import br.com.teste.sicredi.representation.request.AbrirSessaoRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 
 import static java.util.Optional.ofNullable;
 
+@Slf4j
 @Service
 public class SessaoService {
 
@@ -28,19 +30,30 @@ public class SessaoService {
 
     public void criarSessao(AbrirSessaoRequest request) {
 
+        log.info("Verificando se já existe sessão para a pauta requisitada.");
+
         if (verificaSessaoExiste(request)) {
+            log.info("Já existe sessão para a pauta requisitada.");
             throw new SessaoException("A sessão dessa pauta já existe.");
         }
+
+        log.info("Verificando se a data limite é válida.");
+
         LocalDateTime dataLimite = verificaDataLimite(request.getDataLimite());
 
         Sessao sessao = pautaService.getPautaById(request.getIdPauta())
                 .map(pauta -> sessaoMapper.toDomain(request, dataLimite))
                 .orElseThrow(() -> new PautaNaoExisteException("Pauta não existe."));
 
+        log.info("Salvando sessão criada.");
+
         repository.save(sessao);
     }
 
     private LocalDateTime verificaDataLimite(LocalDateTime dataLimite) {
+
+        log.info("Verificando se a data limite é nula (para criação de uma default) ou se ela é inválida.");
+
         return ofNullable(dataLimite)
                 .map(this::validaDataLimite)
                 .orElse(LocalDateTime.now().plusMinutes(1));
@@ -49,6 +62,7 @@ public class SessaoService {
     private LocalDateTime validaDataLimite(LocalDateTime request) {
 
         if (request.isBefore(LocalDateTime.now())) {
+            log.info("Data limite é inválida.");
             throw new DataLimiteException("Data limite não pode ser antes da data atual.");
         }
 
