@@ -85,9 +85,13 @@ public class VotoService {
         if (limiteDeVotosAtingido(idPauta) || sessaoService.sessaoEncerrada(idPauta)) {
             List<Voto> todosVotosDaPauta = repository.findAllByIdPauta(idPauta);
             Pauta pauta = pautaService.getPautaById(idPauta).orElseThrow();
+
             log.info("Contabilizando votos 'Sim'.");
+
             int contagemSim = contagemVotos(todosVotosDaPauta, "Sim");
+
             log.info("Contabilizando votos 'Não'.");
+
             int contagemNao = contagemVotos(todosVotosDaPauta, "Não");
 
             log.info("Verificando vencedor.");
