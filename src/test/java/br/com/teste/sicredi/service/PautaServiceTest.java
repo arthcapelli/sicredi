@@ -12,7 +12,10 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -59,5 +62,35 @@ public class PautaServiceTest {
                 .build();
 
         pautaService.cadastrarPauta(request);
+    }
+
+    @Test
+    public void testGetPautaById() {
+        Pauta pauta = Pauta.builder()
+                .titulo("Teste")
+                .limiteVotos(10)
+                .dataCriacao(LocalDateTime.of(2023, 12, 12, 12, 0, 0))
+                .build();
+
+        when(pautaRepository.findById(pauta.getId())).thenReturn(Optional.of(pauta));
+
+        Optional<Pauta> response = pautaService.getPautaById(pauta.getId());
+
+        assertEquals(response.get(), pauta);
+    }
+
+    @Test
+    public void testExistsById() {
+        Pauta pauta = Pauta.builder()
+                .titulo("Teste")
+                .limiteVotos(10)
+                .dataCriacao(LocalDateTime.of(2023, 12, 12, 12, 0, 0))
+                .build();
+
+        when(pautaRepository.existsById(pauta.getId())).thenReturn(true);
+
+        boolean response = pautaService.existsById(pauta.getId());
+
+        assertTrue(response);
     }
 }

@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 import java.util.Random;
 
 @Slf4j
@@ -57,7 +56,4 @@ public class AssociadoService {
 
     }
 
-    public Optional<Associado> getById(Integer idAssociado) {
-        return repository.findById(idAssociado);
-    }
 }
