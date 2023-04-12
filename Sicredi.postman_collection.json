@@ -1,0 +1,444 @@
+{
+	"info": {
+		"_postman_id": "687adb7a-dd17-4550-b974-44d6131250a6",
+		"name": "Sicredi",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Pauta",
+			"item": [
+				{
+					"name": "LOCAL",
+					"item": [
+						{
+							"name": "Cadastrar Pauta",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"titulo\": \"Pauta Teste\",\r\n    \"limiteVotos\": 2000,\r\n    \"dataCriacao\": \"2023-04-12T11:00:00\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8090/sicredi/pauta",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8090",
+									"path": [
+										"sicredi",
+										"pauta"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Online",
+					"item": [
+						{
+							"name": "Cadastrar Pauta",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"titulo\": \"Pauta02\",\r\n    \"limiteVotos\": 4,\r\n    \"dataCriacao\": \"2023-04-08T13:00:00\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://sicredi-production.up.railway.app/sicredi/pauta",
+									"protocol": "http",
+									"host": [
+										"sicredi-production",
+										"up",
+										"railway",
+										"app"
+									],
+									"path": [
+										"sicredi",
+										"pauta"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Voto",
+			"item": [
+				{
+					"name": "LOCAL",
+					"item": [
+						{
+							"name": "Contagem Vencedor",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8090/sicredi/voto/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8090",
+									"path": [
+										"sicredi",
+										"voto",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Votar na Pauta",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"idAssociado\": 5,\r\n    \"valorVoto\": \"NAO\",\r\n    \"idPauta\": 2\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8090/sicredi/voto",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8090",
+									"path": [
+										"sicredi",
+										"voto"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Online",
+					"item": [
+						{
+							"name": "Contagem Vencedor",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://sicredi-production.up.railway.app/sicredi/voto/1",
+									"protocol": "http",
+									"host": [
+										"sicredi-production",
+										"up",
+										"railway",
+										"app"
+									],
+									"path": [
+										"sicredi",
+										"voto",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Votar na Pauta",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"idAssociado\": 5,\r\n    \"valorVoto\": \"NAO\",\r\n    \"idPauta\": 2\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://sicredi-production.up.railway.app/sicredi/voto",
+									"protocol": "http",
+									"host": [
+										"sicredi-production",
+										"up",
+										"railway",
+										"app"
+									],
+									"path": [
+										"sicredi",
+										"voto"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Associado",
+			"item": [
+				{
+					"name": "LOCAL",
+					"item": [
+						{
+							"name": "Cadastrar Associado",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"cpf\": \"12345678915\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8090/sicredi/associado",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8090",
+									"path": [
+										"sicredi",
+										"associado"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Valida CPF",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8090/sicredi/associado/51977995012",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8090",
+									"path": [
+										"sicredi",
+										"associado",
+										"51977995012"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Online",
+					"item": [
+						{
+							"name": "Cadastrar Associado",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"cpf\": \"12345678915\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://sicredi-production.up.railway.app/sicredi/associado",
+									"protocol": "http",
+									"host": [
+										"sicredi-production",
+										"up",
+										"railway",
+										"app"
+									],
+									"path": [
+										"sicredi",
+										"associado"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Valida CPF",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://sicredi-production.up.railway.app/sicredi/associado/51977995012",
+									"protocol": "http",
+									"host": [
+										"sicredi-production",
+										"up",
+										"railway",
+										"app"
+									],
+									"path": [
+										"sicredi",
+										"associado",
+										"51977995012"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Sessão",
+			"item": [
+				{
+					"name": "LOCAL",
+					"item": [
+						{
+							"name": "Abrir Sessão",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"idPauta\": 2,\r\n    \"dataLimite\": \"2023-04-08T20:00:00\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8090/sicredi/sessao",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8090",
+									"path": [
+										"sicredi",
+										"sessao"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Online",
+					"item": [
+						{
+							"name": "Abrir Sessão",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"idPauta\": 2,\r\n    \"dataLimite\": \"2023-04-08T20:00:00\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://sicredi-production.up.railway.app/sicredi/sessao",
+									"protocol": "http",
+									"host": [
+										"sicredi-production",
+										"up",
+										"railway",
+										"app"
+									],
+									"path": [
+										"sicredi",
+										"sessao"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Verificador CPF",
+			"item": [
+				{
+					"name": "Busca CPF LOCAL",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8090/cpf/51977995012",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"cpf",
+								"51977995012"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Busca CPF",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://valida-cpf-sicredi-production.up.railway.app/cpf/51977995012",
+							"protocol": "http",
+							"host": [
+								"valida-cpf-sicredi-production",
+								"up",
+								"railway",
+								"app"
+							],
+							"path": [
+								"cpf",
+								"51977995012"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
